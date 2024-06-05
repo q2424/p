@@ -1,0 +1,246 @@
+5 a).
+
+Client:
+
+import java.util.*;
+import java.net.*;
+import java.io.*;
+
+class client {
+    public static void main(String[] args) {
+        long t1, t2;
+        int c = 0;
+        String str;
+
+        try {
+            Socket s = new Socket("localhost", 5555);
+            BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            PrintStream out1 = new PrintStream(s.getOutputStream());
+
+            while (c < 4) {
+                t1 = System.currentTimeMillis();
+                str = "Welcome to Ubuntu";
+
+                out1.println(str);
+                System.out.println(br.readLine());
+
+                t2 = System.currentTimeMillis();
+                System.out.println("TLL : " + (t2 - t1) + " ms");
+                c++;
+            }
+            s.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+
+Server :
+
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) {
+        try {
+            ServerSocket ss = new ServerSocket(5555);
+            Socket s = ss.accept();
+            int c = 0;
+            
+            while (c < 4) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                PrintStream out2 = new PrintStream(s.getOutputStream());
+
+                String str = br.readLine();
+                out2.println("Response Message: " + InetAddress.getLocalHost() + " Length: " + str.length()+" String "+str);
+                c++;
+            }
+            s.close();
+            ss.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+
+==================================================================================================
+
+5 b)
+
+
+import java.io.*;
+import java.util.*;
+
+class Traceroute {
+    public static void main(String args[]) {
+        try {
+            System.out.print("Enter the IP Address to be Traced: ");
+            Scanner scanner = new Scanner(System.in);
+            String ip = scanner.nextLine();
+            
+            Runtime runtime = Runtime.getRuntime();
+            Process process = runtime.exec("traceroute " + ip);
+            
+            Scanner processScanner = new Scanner(process.getInputStream());
+            while (processScanner.hasNextLine()) {
+                System.out.println(" " + processScanner.nextLine());
+            }
+            
+            processScanner.close();
+            scanner.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+
+==================================================================================================
+
+8)
+
+Server:
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import javax.swing.*;
+import java.awt.*;
+
+class server {
+    public static void main(String[] args) {
+        try {
+            ServerSocket ss = new ServerSocket(5555);
+            Socket s = ss.accept();
+            int c = 0;
+            
+                BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                PrintStream out2 = new PrintStream(s.getOutputStream());
+
+                String str = br.readLine();
+		opener(str);
+                out2.println("Image Opened");
+             
+       
+            s.close();
+            ss.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void opener(String str) {
+        String directoryPath = str;
+        
+        
+       JFrame frame = new JFrame("Image Viewer");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        // Load and display the image
+        ImageIcon imageIcon = new ImageIcon(directoryPath);
+        JLabel label = new JLabel(imageIcon);
+        frame.add(label);
+        
+        // Adjust the frame size to fit the image
+        frame.pack();
+        frame.setLocationRelativeTo(null); // Center the frame
+        frame.setVisible(true);
+    }
+}
+
+
+Client:
+
+
+import java.util.*;
+import java.net.*;
+import java.io.*;
+
+class client {
+    public static void main(String[] args) {
+        try {
+            Socket s = new Socket("localhost", 5555);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            PrintStream out1 = new PrintStream(s.getOutputStream());
+
+
+  
+            String str = "C:/Users/gokul/Documents/download.jpg";
+
+            out1.println(str);
+            System.out.println("Response Message : "+br.readLine());
+
+                               
+            s.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+==================================================================================================
+
+9)
+
+import java.util.*;
+class subnet
+{
+	public static void main(String []args)
+	{
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter the IP Address : ");
+		String ip = sc.next();
+		String arr[] = ip.split("\\.");
+		String binary="";
+
+		for(int i=0;i<4;i++)
+		{
+			int dec = Integer.parseInt(arr[i]);
+			String b = Integer.toBinaryString(dec);
+			binary+=b;
+			binary+=" ";
+		}
+		System.out.println("Binary Format of Ip Address : "+binary);
+
+		//Subnet Mask of Ip
+		System.out.println("Enter the number of addresses in each subnet : ");
+		int n = sc.nextInt();
+		int bits = (int)Math.ceil(Math.log(n)/Math.log(2));
+		int mask = 32 - bits;
+
+		System.out.println("Subnet Mask : "+mask);
+
+		//Network Address  -1
+		String na = "";
+		String ba = "";
+		for(int i=0;i<4;i++)
+		{
+			if(i==3)
+			{
+				int add=Integer.parseInt(arr[i]);
+				na+=String.valueOf(add-1);
+				ba+=String.valueOf(add+6);
+			}
+			else
+			{
+				na+=arr[i]+".";
+				ba+=arr[i]+".";
+			}
+		}
+
+		//Print data
+		System.out.println("Network address is : "+na);
+		System.out.println("Broadcast address is : "+ba);
+	}
+}
+
+
+==================================================================================================
